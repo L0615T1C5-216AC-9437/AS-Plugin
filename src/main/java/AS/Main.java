@@ -17,7 +17,7 @@ public class Main extends Plugin {
     public boolean ass = false; // ass -> auto sync started, not THAT
 
     public Main() throws InterruptedException {
-        Events.on(EventType.WaveEvent.class, event -> {
+        Events.on(EventType.WorldLoadEvent.class, event -> {
             if(!ass) {
                 Thread AS = new Thread() {
                     public void run() {
