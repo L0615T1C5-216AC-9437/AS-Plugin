@@ -14,7 +14,7 @@ import static mindustry.Vars.*;
 
 
 public class Main extends Plugin {
-    public boolean ass = false; // ass -> auto sync started, not THAT
+    private boolean ass = false; // ass -> auto sync started, not THAT
 
     public Main() throws InterruptedException {
         Events.on(EventType.WorldLoadEvent.class, event -> {
@@ -49,6 +49,9 @@ public class Main extends Plugin {
                 };
                 AS.start();
                 Log.info("Attempting to start AS...");
+                ass = true;
+            } else {
+                Log.info("AS already started");
             }
         });
     }
