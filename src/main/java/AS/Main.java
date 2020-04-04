@@ -1,16 +1,20 @@
 package AS;
 
 //-----imports-----//
+
+import arc.Core;
 import arc.Events;
 import arc.util.CommandHandler;
 import arc.util.Log;
-import arc.struct.Array;
 import mindustry.entities.type.Player;
 import mindustry.game.EventType;
 import mindustry.gen.Call;
 import mindustry.plugin.Plugin;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -18,34 +22,65 @@ import static mindustry.Vars.*;
 
 
 public class Main extends Plugin {
-    public Array<String> asyncList = new Array<>();
+    public static ArrayList<String> asyncList = new ArrayList<String>();
+    public int spacing;
 
     private int timer = 5;
 
+    private JSONObject alldata;
+    private JSONObject data; //token, channel_id, role_id
+
+    private HashMap<Long, String> cooldowns = new HashMap<Long, String>(); //uuid
+
     public Main() throws InterruptedException {
-        Events.on(EventType.ServerLoadEvent.class, event -> {
-            try {
-                FileInputStream loadFile = new FileInputStream("NAS.cn");
-                ObjectInputStream in = new ObjectInputStream(loadFile);
-                asyncList = (Array<String>) in.readObject();
-                in.close();
-                loadFile.close();
-                Log.info("Successfully loaded NAS list.");
-            } catch (IOException i) {
-                i.printStackTrace();
+        try {
+            String pureJson = Core.settings.getDataDirectory().child("mods/settings.json").readString();
+            alldata = new JSONObject(new JSONTokener(pureJson));
+            if (!alldata.has("async")){
+                Log.err("settings.json missing async");
+                //this.makeSettingsFile("settings.json");
                 return;
-            } catch (ClassNotFoundException c) {
-                System.out.println("NAS class not found");
-                Log.info("do /gnnas to generate new nas.cn file");
-                c.printStackTrace();
+            } else {
+                data = alldata.getJSONObject("async");
+            }
+        } catch (Exception e) {
+            if (e.getMessage().contains("File not found: config\\mods\\settings.json")){
+                Log.err("AS: settings.json file is missing.");
+                return;
+            } else {
+                Log.err("AS: Error reading JSON.");
+                e.printStackTrace();
                 return;
             }
+        }
 
-            auto at = new auto(Thread.currentThread());
+        try {
+            FileInputStream loadFile = new FileInputStream("NAS.cn");
+            ObjectInputStream in = new ObjectInputStream(loadFile);
+            asyncList = (ArrayList<String>) in.readObject();
+            in.close();
+            loadFile.close();
+            Log.info("Successfully loaded NAS list.");
+        } catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("NAS class not found");
+            Log.info("do /gnnas to generate new nas.cn file");
+            c.printStackTrace();
+            return;
+        }
+        if (data.has("spacing")) {
+            spacing = data.getInt("spacing");
+            Log.info("Autosync set to every " + spacing + " minutes.");
+            auto at = new auto(Thread.currentThread(), spacing);
             at.setDaemon(false);
             at.start();
             Log.info("Attempting to start AS in 1 min...");
-        });
+        } else {
+            Log.err("async missing key `spacing`");
+        }
+
 
         Events.on(EventType.WaveEvent.class, event -> {
             if (state.wave >= 35) {
@@ -78,7 +113,7 @@ public class Main extends Plugin {
                 out.close();
                 fileOut.close();
                 Log.info("done");
-            } catch (IOException | NullPointerException i) {
+            } catch (IOException i) {
                 i.printStackTrace();
             }
         });

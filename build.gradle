@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply plugin: "maven"
 
 version '1.0'
 
@@ -11,12 +12,15 @@ repositories{
 
 ext{
     //the build number that this plugin is made for
-    mindustryVersion = 'v103'
+    mindustryVersion = 'v104'
 }
 
 dependencies{
     compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Mindustry:server:$mindustryVersion"
+    implementation 'org.javacord:javacord:3.0.5'
+    compile group: 'org.json', name: 'json', version: '20190722'
 }
 
 jar{
@@ -25,3 +29,4 @@ jar{
         configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
     }
 }
+compileJava.options.encoding = 'UTF-8'
