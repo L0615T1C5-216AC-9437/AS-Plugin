@@ -17,6 +17,10 @@ Simply place the output jar from the step above in your server's `config/mods` d
 List your currently installed plugins/mods by running the `mods` command.
 If you want to adjust any settings, just change the settings.json
 
+### Configuring
+
+To modify settings, modify the settings.json file.
+
 It should look like this
 ```
 {
@@ -39,9 +43,5 @@ If you have more than one mod using settings.json, it should look like this
   }
 }
 ```
-### Configuring
-
-To modify settings, modify the settings.json file.
-
 ### Made By L0615T1C5.216AC:9437
 Proud owner of Chaotic-neutral.ddns.net:1111
