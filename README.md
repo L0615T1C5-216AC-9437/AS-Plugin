@@ -16,5 +16,9 @@ Note: Highly recommended to use Java 8.
 Simply place the output jar from the step above in your server's `config/mods` directory and restart the server.
 List your currently installed plugins/mods by running the `mods` command.
 
+### Configuring
+
+To modify settings, modify the settings.json file.
+
 ### Made By L0615T1C5.216AC:9437
 Proud owner of Chaotic-neutral.ddns.net:1111
