@@ -20,10 +20,9 @@ If you want to adjust any settings, just change the settings.json
 It should look like this
 ```
 {
-  "bcl":
+  "async":
   {
-	  "messages": <max messages>,
-	  "timespan": <every this seconds>
+    "spacing": 5
   }
 }
 ```
@@ -34,10 +33,9 @@ If you have more than one mod using settings.json, it should look like this
   {
     "stuff": ""
   },
-  "bcl":
+  "async":
   {
-	  "messages": <max messages>,
-	  "timespan": <every this seconds>
+    "spacing": 5
   }
 }
 ```
