@@ -17,6 +17,8 @@ Simply place the output jar from the step above in your server's `config/mods` d
 List your currently installed plugins/mods by running the `mods` command.
 If you want to adjust any settings, just change the settings.json
 
+If installing from a release, download the latest release .java and .json and put *both* in your mobs folder.
+
 ### Configuring
 
 To modify settings, modify the settings.json file.
