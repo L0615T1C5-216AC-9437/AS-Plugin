@@ -39,6 +39,16 @@ public class auto extends Thread {
                 }
             }
             try {
+                FileOutputStream fileOut = new FileOutputStream("NAS.cn");
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(Main.asyncList);
+                out.close();
+                fileOut.close();
+                Log.info("done");
+            } catch (IOException i) {
+                i.printStackTrace();
+            }
+            try {
                 TimeUnit.MINUTES.sleep(timer);
             } catch (InterruptedException e) {
                 e.printStackTrace();

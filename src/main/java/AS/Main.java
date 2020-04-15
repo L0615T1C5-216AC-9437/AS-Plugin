@@ -34,6 +34,23 @@ public class Main extends Plugin {
 
     public Main() throws InterruptedException {
         try {
+            FileInputStream loadFile = new FileInputStream("NAS.cn");
+            ObjectInputStream in = new ObjectInputStream(loadFile);
+            asyncList = (ArrayList<String>) in.readObject();
+            in.close();
+            loadFile.close();
+            Log.info("Successfully loaded NAS list.");
+        } catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("NAS class not found");
+            Log.info("do /gnnas to generate new nas.cn file");
+            c.printStackTrace();
+            return;
+        }
+
+        try {
             String pureJson = Core.settings.getDataDirectory().child("mods/settings.json").readString();
             alldata = new JSONObject(new JSONTokener(pureJson));
             if (!alldata.has("async")){
@@ -54,22 +71,6 @@ public class Main extends Plugin {
             }
         }
 
-        try {
-            FileInputStream loadFile = new FileInputStream("NAS.cn");
-            ObjectInputStream in = new ObjectInputStream(loadFile);
-            asyncList = (ArrayList<String>) in.readObject();
-            in.close();
-            loadFile.close();
-            Log.info("Successfully loaded NAS list.");
-        } catch (IOException i) {
-            i.printStackTrace();
-            return;
-        } catch (ClassNotFoundException c) {
-            System.out.println("NAS class not found");
-            Log.info("do /gnnas to generate new nas.cn file");
-            c.printStackTrace();
-            return;
-        }
         if (data.has("spacing")) {
             spacing = data.getInt("spacing");
             Log.info("Autosync set to every " + spacing + " minutes.");
