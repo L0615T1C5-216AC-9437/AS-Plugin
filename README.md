@@ -1,3 +1,6 @@
+### Discontinued
+this plugin has been discontinued. You can try out [async](https://github.com/L0615T1C5-216AC-9437/async-cn).
+
 ### Description
 A Auto Sync plugin to keep players up to date.
 
